@@ -1,0 +1,33 @@
+{
+    "name": "todo-crud-app",
+    "version": "1.0.0",
+    "description": "Containerized ToDo application developed with Nodejs, Express and Postgresql",
+    "main": "./src/index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node ./src/index.js",
+        "dev": "npm run live-server",
+        "live-server": "nodemon ./src/index.js",
+        "format:check": "prettier --check .",
+        "format:fix": "prettier --write .",
+        "lint:check": "eslint .",
+        "lint:fix": "eslint --fix ."
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "eslint": "^8.39.0",
+        "eslint-config-google": "^0.14.0",
+        "eslint-config-prettier": "^8.8.0",
+        "eslint-plugin-import": "^2.27.5",
+        "eslint-plugin-n": "^15.7.0",
+        "eslint-plugin-promise": "^6.1.1",
+        "nodemon": "^2.0.22",
+        "prettier": "^2.8.8"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "winston": "^3.8.2"
+    }
+}
