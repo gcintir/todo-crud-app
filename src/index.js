@@ -14,4 +14,4 @@ const PORT = process.env.SERVER_PORT
 
 app.listen(PORT, appLogger.info(`Server is UP at port ${PORT}`))
 
-await openDbConnection();
+await openDbConnection()

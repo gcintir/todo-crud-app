@@ -5,20 +5,20 @@ export const TodoItem = sequelize.define('todo_item', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
     },
     title: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     },
     description: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     },
     isDone: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
-    }
-});
+        defaultValue: false,
+    },
+})
 
-await TodoItem.sync({ alter: true });
+await TodoItem.sync({ alter: true })
