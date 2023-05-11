@@ -1,9 +1,9 @@
 import { sequelize } from '../config/db.js'
 import { DataTypes } from 'sequelize'
 
-const TABLE_NAME = 'todo_item'
+const TABLE_NAME = 'user'
 
-export const TodoItem = sequelize.define(
+export const User = sequelize.define(
     TABLE_NAME,
     {
         id: {
@@ -11,21 +11,13 @@ export const TodoItem = sequelize.define(
             autoIncrement: true,
             primaryKey: true,
         },
-        title: {
+        username: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        description: {
+        password: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        isDone: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-        },
-        expiryDate: {
-            type: DataTypes.DATE,
-            allowNull: true,
         },
     },
     {

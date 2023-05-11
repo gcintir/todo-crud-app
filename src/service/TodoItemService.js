@@ -1,23 +1,27 @@
 import appLogger from '../util/AppLogger.js'
 import { TodoItem } from '../model/TodoItem.js'
 
-export async function saveTodoItem(title, description) {
-    const todoItem = await TodoItem.create({
+export async function saveTodoItem(title, description, expiryDate, userId) {
+    const todoItem = await TodoItem.build({
         title: title,
         description: description,
+        expiryDate: expiryDate || null,
+        userId: userId,
     })
-    appLogger.info('todoItem created with id ' + todoItem.id)
-    return todoItem
+    const todoItemRecord = await todoItem.save()
+    appLogger.info('todoItem created with id ' + todoItemRecord.id)
+    return todoItemRecord ? todoItemRecord.dataValues : undefined
 }
 
 export async function updateTodoItem(todoItem) {
-    let savedTodoItem = await await TodoItem.findByPk(todoItem.id)
+    let savedTodoItem = await TodoItem.findByPk(todoItem.id)
     if (savedTodoItem === null) {
         return savedTodoItem
     } else {
         savedTodoItem.title = todoItem.title
         saveTodoItem.description = todoItem.description
         savedTodoItem.isDone = todoItem.isDone
+        savedTodoItem.expiryDate = todoItem.expiryDate
         savedTodoItem = await savedTodoItem.save()
         return savedTodoItem.dataValues
     }

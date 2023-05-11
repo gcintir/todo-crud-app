@@ -3,6 +3,10 @@ dotenv.config()
 import appLogger from './util/AppLogger.js'
 import express from 'express'
 import { openDbConnection } from './config/db.js'
+import * as association from './model/Association.js'
+
+import * as todoItemService from './service/TodoItemService.js'
+import * as authService from './service/AuthService.js'
 
 const app = express()
 
