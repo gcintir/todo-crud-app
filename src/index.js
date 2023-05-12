@@ -2,20 +2,27 @@ import dotenv from 'dotenv'
 dotenv.config()
 import appLogger from './util/AppLogger.js'
 import express from 'express'
+import bodyParser from 'body-parser'
 import { openDbConnection } from './config/db.js'
 import * as association from './model/Association.js'
+
+import authRouter from './router/AuthRouter.js'
 
 import * as todoItemService from './service/TodoItemService.js'
 import * as authService from './service/AuthService.js'
 
-const app = express()
+const expressApp = express()
+expressApp.use(bodyParser.urlencoded({ extended: true }))
+expressApp.use(bodyParser.json())
 
-app.get('/', (req, res) => {
+expressApp.use('/auth', authRouter)
+
+expressApp.get('/', (req, res) => {
     res.send('Server is UP')
 })
 
 const PORT = process.env.SERVER_PORT
 
-app.listen(PORT, appLogger.info(`Server is UP at port ${PORT}`))
+expressApp.listen(PORT, appLogger.info(`Server is UP at port ${PORT}`))
 
 await openDbConnection()

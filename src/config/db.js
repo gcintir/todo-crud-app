@@ -27,11 +27,12 @@ async function synchronizeDb() {
     await sequelize.sync({ force: true })
     appLogger.info('All models were synchronized successfully')
 }
-
+/*
 async function updateDb() {
     await sequelize.sync({ alter: true })
     appLogger.info('All models were updated successfully')
 }
+*/
 
 export async function closeDbConnection() {
     try {
