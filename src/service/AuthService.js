@@ -3,10 +3,21 @@ dotenv.config()
 import appLogger from '../util/AppLogger.js'
 import { User } from '../model/User.js'
 import jsonwebtoken from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+import { UsernameExistError } from '../error/UsernameExistError.js'
+import { UserNotFoundError } from '../error/UserNotFoundError.js'
 
 export async function login(username, password) {
+    const user = await getUserByUsername(username)
+    if (
+        user === null ||
+        (await bcrypt.compare(password, user.dataValues.password)) === false
+    ) {
+        throw new UserNotFoundError('User not found')
+    }
     return await generateJwtToken({
         userId: 1,
+        username: user.dataValues.username,
     })
 }
 
@@ -15,9 +26,12 @@ export async function logout(token) {
 }
 
 export async function saveUser(username, password) {
+    if ((await getUserByUsername(username)) !== null) {
+        throw new UsernameExistError('Username already available')
+    }
     const user = await User.build({
         username: username,
-        password: password,
+        password: await bcrypt.hash(password, +process.env.ENC_SALT),
     })
     const userRecord = await user.save()
     appLogger.info('user created with id ' + userRecord.id)
@@ -34,6 +48,10 @@ export async function getUserWithTodoItemsById(id) {
     return user === null ? undefined : user.dataValues
 }
 
+async function getUserByUsername(username) {
+    return await User.findOne({ where: { username: username } })
+}
+
 async function generateJwtToken(data) {
     const token = jsonwebtoken.sign(data, process.env.JWT_TOKEN_KEY, {
         expiresIn: '1h',
@@ -42,7 +60,7 @@ async function generateJwtToken(data) {
     return token
 }
 
-async function verifyJwtToken(token) {
+export async function verifyJwtToken(token) {
     let decoded
     try {
         decoded = await jsonwebtoken.verify(token, process.env.JWT_TOKEN_KEY)
