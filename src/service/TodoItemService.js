@@ -1,5 +1,6 @@
 import appLogger from '../util/AppLogger.js'
 import { TodoItem } from '../model/TodoItem.js'
+import { Op } from 'sequelize'
 
 export async function saveTodoItem(title, description, expiryDate, userId) {
     const todoItem = await TodoItem.build({
@@ -18,10 +19,20 @@ export async function updateTodoItem(todoItem) {
     if (savedTodoItem === null) {
         return savedTodoItem
     } else {
-        savedTodoItem.title = todoItem.title
-        saveTodoItem.description = todoItem.description
-        savedTodoItem.isDone = todoItem.isDone
-        savedTodoItem.expiryDate = todoItem.expiryDate
+        const updatedFields = {}
+        if (todoItem.title) {
+            updatedFields.title = todoItem.title
+        }
+        if (todoItem.description) {
+            updatedFields.description = todoItem.description
+        }
+        if (todoItem.isDone) {
+            updatedFields.isDone = todoItem.isDone
+        }
+        if (todoItem.expiryDate) {
+            updatedFields.expiryDate = todoItem.expiryDate
+        }
+        savedTodoItem.set(updatedFields)
         savedTodoItem = await savedTodoItem.save()
         return savedTodoItem.dataValues
     }
@@ -46,6 +57,65 @@ export async function getAllTodoItemsByPagination(offset, limit) {
         offset: offset,
         limit: limit,
         where: {},
+    })
+    return rows !== undefined && rows[0] !== undefined
+        ? rows.map((r) => r.dataValues)
+        : undefined
+}
+
+export async function searchTodoItemsByPagination(
+    offset,
+    limit,
+    searchObjects
+) {
+    let whereCriteria
+    if (
+        searchObjects.title ||
+        searchObjects.description ||
+        searchObjects.isDone
+    ) {
+        whereCriteria = {
+            [Op.and]: [
+                { userId: searchObjects.userId },
+                {
+                    [Op.or]: [
+                        {
+                            title: {
+                                [Op.like]: '%' + searchObjects.title + '%',
+                            },
+                        },
+                        {
+                            description: {
+                                [Op.like]:
+                                    '%' + searchObjects.description + '%',
+                            },
+                        },
+                        {
+                            isDone: {
+                                [Op.eq]: searchObjects.isDone,
+                            },
+                        },
+                    ],
+                },
+            ],
+        }
+    } else {
+        whereCriteria = {
+            userId: {
+                [Op.eq]: searchObjects.userId,
+            },
+        }
+    }
+
+    const { count, rows } = await TodoItem.findAndCountAll({
+        offset: offset,
+        limit: limit,
+        where: whereCriteria,
+        order: [
+            ['expiryDate', 'ASC'],
+            ['updatedAt', 'DESC'],
+            ['createdAt', 'ASC'],
+        ],
     })
     return rows !== undefined && rows[0] !== undefined
         ? rows.map((r) => r.dataValues)
