@@ -2,8 +2,7 @@
 
 ## Description
 
-Here is my multi-tenant ToDo Item Application which I built with NodeJs on top of Express framework. It allows users to create, update, delete and search todo items. With this application, users can easily manage their tasks. All Rest APIs are protected with JWT. Before starting to use this application, you first need to register yourself and login to application. After login, you receive
-I hope you enjoy this application and look forward to your contributions.
+Here is my multi-tenant ToDo Item Application which I built with NodeJs on top of Express framework. It allows users to create, update, delete and search todo items. With this application, users can easily manage their tasks.I hope you enjoy this application and look forward to your contributions.
 
 ## High Level Flow
 
