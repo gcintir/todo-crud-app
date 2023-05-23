@@ -2,7 +2,7 @@
 
 ## Description
 
-Here is my multi-tenant ToDo Item Application which I built with NodeJs on top of Express framework. It allows users to create, update, delete and search todo items. With this application, users can easily manage their tasks.I hope you enjoy this application and look forward to your contributions.
+Here is my multi-tenant ToDo Item Application which I built with NodeJs on top of Express framework. It allows users to create, update, delete and search todo items. With this application, users can easily manage their tasks. I hope you enjoy this application and look forward to your contributions.
 
 ## High Level Flow
 
@@ -17,7 +17,6 @@ This application has the following features:
 -   Todo item update
 -   Todo item delete
 -   Todo items search
-
 
 ## Installation
 
